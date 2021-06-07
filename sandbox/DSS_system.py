@@ -1,6 +1,5 @@
 import sys
 import datetime
-
 from collections import defaultdict
 from datetime import date
 import re
@@ -68,7 +67,7 @@ def execute(sqlstatement):
 def dss(field_params, baseline_params):
 
     # for every field check the parameters against baseline:
-
+    print()
     to_db = dict()
     write_to_db = []
 
