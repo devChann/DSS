@@ -8,6 +8,10 @@ from Configs import Baseline
 import json
 
 import mysql.connector
+
+sample = [{'fieldID': 4, 'humidity': '88', 'temp': '{"day": -3.39, "min": -9.41, "max": -1.6, "night": -5.14, "eve": -4.5, "morn": -9.41}', 'rain': None, 'ndvi': None, 'msavi': None, 'soil_m_6.9': '19.00 mm/100mm'}, {'fieldID': 4, 'humidity': '88', 'temp': '{"day": -3.39, "min": -9.41, "max": -1.6, "night": -5.14, "eve": -4.5, "morn": -9.41}', 'rain': None, 'ndvi': None, 'msavi': None, 'soil_m_6.9': '19.00 mm/100mm'}, {'fieldID': 4, 'humidity': '88', 'temp': '{"day": -3.36, "min": -9.37, "max": -1.56, "night": -5.12, "eve": -4.5, "morn": -9.37}', 'rain': None, 'ndvi': None, 'msavi': None, 'soil_m_6.9': '19.00 mm/100mm'}, {'fieldID': 4, 'humidity': '88', 'temp': '{"day": -3.39, "min": -9.43, "max": -1.6, "night": -5.14, "eve": -4.5, "morn": -9.43}', 'rain': None, 'ndvi': None, 'msavi': None, 'soil_m_6.9': '19.00 mm/100mm'},
+          {'fieldID': 4, 'humidity': '88', 'temp': '{"day": -3.39, "min": -9.43, "max": -1.6, "night": -5.14, "eve": -4.5, "morn": -9.43}', 'rain': None, 'ndvi': None, 'msavi': None, 'soil_m_6.9': '19.00 mm/100mm'}, {'fieldID': 4, 'humidity': '88', 'temp': '{"day": -3.39, "min": -9.43, "max": -1.6, "night": -5.14, "eve": -4.5, "morn": -9.43}', 'rain': None, 'ndvi': None, 'msavi': None, 'soil_m_6.9': '19.00 mm/100mm'}, {'fieldID': 4, 'humidity': '88', 'temp': '{"day": -3.39, "min": -9.43, "max": -1.6, "night": -5.14, "eve": -4.5, "morn": -9.43}', 'rain': None, 'ndvi': None, 'msavi': None, 'soil_m_6.9': '20.31 mm/100mm'}, {'fieldID': 4, 'humidity': '88', 'temp': '{"day": -3.4, "min": -9.46, "max": -1.63, "night": -5.18, "eve": -4.5, "morn": -9.46}', 'rain': None, 'ndvi': None, 'msavi': None, 'soil_m_6.9': '20.42 mm/100mm'}]
+
 # To implement later:
 current_date = date.today()
 query_date = current_date.strftime("%d/%m/%Y")
@@ -311,7 +315,7 @@ def test_field_suitability(field_id, current_status, crop, parameter, items):
 # Implement class later:
 
 
-dssx = dss(execute(query), Baseline)
+dssx = dss(sample, Baseline)
 
 # elif(param_key == 'ph'):
 #     temp_ph = []
