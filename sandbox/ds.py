@@ -1,6 +1,6 @@
 import sys
 import datetime
-import pyodbc
+
 from collections import defaultdict
 from datetime import date
 import re
