@@ -12,15 +12,12 @@ import mysql.connector
 # To implement later:
 current_date = date.today()
 query_date = current_date.strftime("%d/%m/%Y")
-query = 'SELECT fieldID,humidity,temp,rain,ndvi,msavi,soilmoisture,regdate FROM sampledb'
+query = 'select gn.fieldID,humidity,temp,rain,ndvi,msavi,`soil_m_6.9` from gisin gn inner join gisout go on gn.fieldID=go.fieldID limit 1000'
 
 
 def insert_dss_out(*argv):
     dss_db = mysql.connector.connect(
-        host="localhost",
-        user="lisa",
-        password="BsiKpt_y78ga"
-    )
+        host="localhost", user="lisa", password="BsiKpt_y78ga")
     cursor = dss_db.cursor()
     try:
         cursor.execute(*argv)
@@ -39,15 +36,12 @@ def execute(sqlstatement):
         #                       'Database=PMSDB;'
         #                       'Trusted_Connection=yes;')
         conn = mysql.connector.connect(
-            host="localhost",
-            user="lisa",
-            password="BsiKpt_y78ga"
-        )
+            host="localhost", user="zaka", password="FreeLance1Z", database="gis")
         cursor = conn.cursor()
 
         cursor.execute(sqlstatement)
         # conn.commit()
-        headers = [i[0] for i in cursor.description]
+        # headers = [i[0] for i in cursor.description]
         # initialize dict
         data_dict = dict()
         for rows in cursor:
