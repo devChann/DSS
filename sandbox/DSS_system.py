@@ -1,6 +1,6 @@
 import sys
 import datetime
-import pyodbc
+
 from collections import defaultdict
 from datetime import date
 import re
@@ -17,7 +17,11 @@ query = 'select gn.fieldID,humidity,temp,rain,ndvi,msavi,`soil_m_6.9` from gisin
 
 def insert_dss_out(*argv):
     dss_db = mysql.connector.connect(
-        host="localhost", user="lisa", password="BsiKpt_y78ga")
+        host="localhost",
+        user="lisa",
+        password="BsiKpt_y78ga",
+        database="dssout"
+    )
     cursor = dss_db.cursor()
     try:
         cursor.execute(*argv)
@@ -36,12 +40,17 @@ def execute(sqlstatement):
         #                       'Database=PMSDB;'
         #                       'Trusted_Connection=yes;')
         conn = mysql.connector.connect(
-            host="localhost", user="zaka", password="FreeLance1Z", database="gis")
+            host="localhost",
+            user="zaka",
+            password="FreeLance1Z",
+            database="gis"
+        )
         cursor = conn.cursor()
 
         cursor.execute(sqlstatement)
         # conn.commit()
-        # headers = [i[0] for i in cursor.description]
+        headers = ["fieldID", "humidity", "temp", "rain",
+                   "ndvi", "msavi", "soilmoisture"]
         # initialize dict
         data_dict = dict()
         for rows in cursor:
@@ -50,6 +59,7 @@ def execute(sqlstatement):
                 {headers[1]: rows[1], headers[2]: rows[2],
                  headers[3]: rows[3], headers[4]: rows[4], headers[5]: rows[5],
                  headers[6]: rows[6], headers[7]: rows[7]})
+
         return data_dict
     except (Exception) as error:
         print(error)
