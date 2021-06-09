@@ -10,7 +10,7 @@ import mysql.connector
 #  posible enhancesment -  pull date based on date.
 current_date = date.today()
 query_date = current_date.strftime("%d/%m/%Y")
-query = 'select gn.fieldID,humidity,temp,rain,ndvi,msavi,`soil_m_6.9` from gisin gn inner join gisout go on gn.fieldID=go.fieldID'
+query = 'select gn.fieldID,humidity,temp,rain,ndvi,msavi,`soil_m_6.9` from gisin gn inner join gisout go on gn.fieldID=go.fieldID limit 1000'
 
 
 def dss(field_params, baseline_params):
