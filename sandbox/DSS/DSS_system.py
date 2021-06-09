@@ -21,6 +21,7 @@ def dss(field_params, baseline_params):
     write_to_db = []
 
     for key, values in field_params.items():
+        print(values)
         for i, v in baseline_params.items():
 
             if i == 'Canola':
@@ -531,5 +532,5 @@ def test_baseline_parameters(param_key, values, params, key, i):
 
 def execute_job():
     print("running job")
-    # main 
+    # main
     dss(execute(query), Baseline)
