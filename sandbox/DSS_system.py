@@ -14,7 +14,7 @@ query_date = current_date.strftime("%d/%m/%Y")
 query = 'select gn.fieldID,humidity,temp,rain,ndvi,msavi,`soil_m_6.9` from gisin gn inner join gisout go on gn.fieldID=go.fieldID limit 1000'
 
 
-def insert_dss_out(*argv):
+def insert_dss_out(query):
     dss_db = mysql.connector.connect(
         host="localhost",
         user="lisa",
@@ -23,8 +23,9 @@ def insert_dss_out(*argv):
     )
     cursor = dss_db.cursor()
     try:
-        cursor.execute(*argv)
+        cursor.execute(query)
         dss_db.commit()
+        print("record inserted",cursor.lastrowid)
     except:
         dss_db.rollback()
     dss_db.close()
@@ -57,7 +58,7 @@ def execute(sqlstatement):
             data_dict.setdefault(rows[0], {}).update(
                 {headers[1]: rows[1], headers[2]: rows[2],
                  headers[3]: rows[3], headers[4]: rows[4], headers[5]: rows[5],
-                 headers[6]: rows[6], headers[7]: rows[7]})
+                 headers[6]: rows[6]})
 
         return data_dict
     except (Exception) as error:
@@ -502,7 +503,7 @@ def convert_tuples(txt):
 def convert_list(items):
     # handle string like dictionary
     temp_items = json.loads(str(items))
-    print(temp_items)
+   # print(temp_items)
     l = []
     for k, v in temp_items.items():
         l.append(v)
@@ -515,14 +516,24 @@ def compare_baseline_field_params(l1, l2):
 
 
 def test_field_suitability(field_id, current_status, crop, parameter, items):
+    #val=(field_id, crop, current_status, parameter, current_date)
+    db_conn = mysql.connector.connect(host="localhost",user="lisa",password="BsiKpt_y78ga",database="dssout")
+    db_cursor = db_conn.cursor()
+    sql = "INSERT INTO observatory(fieldID, crop,baseline,parameter,comments,createdAt) VALUES (%s,%s,%s,%s,%s,%s)"
+    
     if any(x == True for x in current_status):
-        print(field_id, "current temp ", parameter, "are suitable")
+        sa="not suitable"
+        query=(field_id,crop,items,str(parameter),"Suitable",query_date)
+       # print(field_id, "current temp ", parameter, "are suitable")
+        db_cursor.execute(sql,query)
+        db_conn.commit()
+        print("record inserted")
     elif all(x == False for x in current_status):
-        val = (field_id, crop, current_status, parameter, current_date)
-        insert_dss_out("""INSERT INTO EMPLOYEE(fieldID,crop, comments, parameter, createdAt)
-            VALUES (%s, %s, %s,%s, %s)""", val)
-        # execute('insert into observatory values(field_id,crop,parameter)')
-        print(field_id, "current", " ", parameter, 'not suitable ', crop)
+        query_state=(field_id,crop,items,str(parameter),str("Not Suitable"),query_date)
+        #query_state = (field_id,crop,str(parameter),"Not suitable")
+        db_cursor.execute(sql,query_state)
+        db_conn.commit()
+        
     return (field_id, "current ", items, parameter, 'not suitable for ', crop)
 
 
