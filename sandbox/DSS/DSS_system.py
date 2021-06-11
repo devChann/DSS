@@ -56,8 +56,7 @@ def convert_list(items):
 
 
 def compare_baseline_field_params(l1, l2):
-    print(l1)
-    print(l2)
+
     x = [any(y[0] <= x <= y[1] for y in l2) for x in l1]
     return x
 

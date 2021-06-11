@@ -1,4 +1,3 @@
-
 BASELINE = {"canola": {"prep": [400, 480],
                        "temp": [6, 10, 26], "period": "May",
                        "humid": "null", "soilM": [80, 120], "ph": [5.5, 8.5]},
@@ -18,14 +17,12 @@ BASELINE = {"canola": {"prep": [400, 480],
             "durum": {"prep": [275, 325], "temp": [10, 30, 10-12, 25, 28], "period": "April",
                       "humid": "null", "soilM": [175, 250], "ph": [6, 7.5]},
             "raye-fall": {"prep": [275, 325], "temp": [5, 6, 10, 26], "period": "May", "humid": "null", "soilM": [28, 250], "ph": [6, 7]},
-            "wheat-winter": {"prep": [], "temp": [], "period": "May", "humid": "null", "soilM": [175, 250], "ph": [6.5, 7]}}
+            "wheat-winter": {"prep": [], "temp": [], "period": "May", "humid": "null", "soilM": [175, 250], "ph": [6.5, 7]},
+            "peas-chick": {"prep": [150, 250], "temp": [21, 19, 30], "period": "May", "humid": "null", "soilM": [225, 250], "ph": [7]},
+            "seed-canary": {"prep": [275, 325], "temp": [7], "period": "May", "humid": [14], "soilM": [225, 250], "ph": [7]},
+            "oats": {"prep": [330, 430], "temp": [7, 8], "period": "May", "humid": "null", "soilM": [225, 250], "ph": [5.5, 6]}}
 
 CROPS = ["canola", "peas", "wheat", "lentils",
          "flax", "beans-soy", "beans-faba", "hemp",
          "potatoes", "barley", "corn", "sunflower", "durum",
          "raye-fall", "wheat-winter"]
-
-
-DATABSECONFIG = {
-
-}
