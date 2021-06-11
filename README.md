@@ -4,4 +4,4 @@ DSS is python base system which uses weather data and agronomy baseline data to 
 
 # Sample Ouput from the database:
 
-
+![dss](https://user-images.githubusercontent.com/34920304/121729376-113ee700-caf7-11eb-9f2a-7847268cceda.PNG)
