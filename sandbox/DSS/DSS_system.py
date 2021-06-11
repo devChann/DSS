@@ -20,7 +20,7 @@ def dss(field_params, baseline_params):
     for field_id, field_values in field_params.items():
 
         for crop, crop_values in baseline_params.items():
-            crop_selector(baseline_values=field_values,
+            crop_selector(baseline_values=crop_values,
                           values=field_values, key=field_id, i=crop)
 
 
