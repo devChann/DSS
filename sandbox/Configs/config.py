@@ -25,4 +25,4 @@ BASELINE = {"canola": {"prep": [400, 480],
 CROPS = ["canola", "peas", "wheat", "lentils",
          "flax", "beans-soy", "beans-faba", "hemp",
          "potatoes", "barley", "corn", "sunflower", "durum",
-         "raye-fall", "wheat-winter"]
+         "raye-fall", "wheat-winter", "peas-chick", "seed-canary", "oats"]
