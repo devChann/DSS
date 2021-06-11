@@ -3,7 +3,7 @@ import datetime
 from collections import defaultdict
 from datetime import date
 import re
-from Configs import Baseline
+from Configs import BASELINE, CROPS
 import json
 import mysql.connector
 
@@ -16,396 +16,19 @@ query = 'select gn.fieldID,humidity,temp,rain,ndvi,msavi,`soil_m_6.9` from gisin
 def dss(field_params, baseline_params):
 
     # for every field check the parameters against baseline:
-    print()
-    to_db = dict()
-    write_to_db = []
 
-    for key, values in field_params.items():
-        print(values)
-        for i, v in baseline_params.items():
+    for field_id, field_values in field_params.items():
 
-            if i == 'Canola':
+        for crop, crop_values in baseline_params.items():
+            crop_selector(baseline_values=field_values,
+                          values=field_values, key=field_id, i=crop)
 
-                for param_key, params in v.items():
-                    test_baseline_parameters(param_key, values, params, key, i)
-            elif(i == 'Peas'):
-                # print(i, '->', v)
-                for param_key, params in v.items():
 
-                    if(param_key == 'soilM'):
-                        temp_soil = []
-                        temp_soil.append(convert_tuples(
-                            values["soilmoisture"]))
-
-                        suit_soil = compare_baseline_field_params(
-                            params, temp_soil)
-                        test_field_suitability(
-                            field_id=key, current_status=suit_soil, items="soil",
-                            crop=i, parameter=temp_soil)
-                    elif(param_key == 'temp'):
-                        temp_tempreature = []
-                        temp_tempreature.append(convert_list(
-                            values["temp"]))
-                        suit_temp = compare_baseline_field_params(
-                            params, temp_tempreature)
-                        test_field_suitability(
-                            field_id=key, current_status=suit_temp, items="temp",
-                            crop=i, parameter=temp_tempreature)
-                    # elif(param_key == 'ph'):
-                    #     temp_ph = []
-                    #     temp_ph.append(convert_tuples(
-                    #         values["soilmoisture"]))
-                    #     suit_ph = compare_baseline_field_params(
-                    #         params, temp_ph)
-
-                    #     print("write db")
-            elif(i == 'Lentils'):
-                # print(i, '->', v)
-                for param_key, params in v.items():
-
-                    if(param_key == 'soilM'):
-                        temp_soil = []
-                        temp_soil.append(convert_tuples(
-                            values["soilmoisture"]))
-                        suit1 = compare_baseline_field_params(
-                            params, temp_soil)
-                        test_field_suitability(
-                            field_id=key, current_status=suit1, items="soil",
-                            crop=i, parameter=temp_soil)
-                    elif(param_key == 'temp'):
-                        temp_tempreature = []
-                        temp_tempreature.append(convert_list(
-                            values["temp"]))
-                        suit_temp = compare_baseline_field_params(
-                            params, temp_tempreature)
-                        test_field_suitability(
-                            field_id=key, current_status=suit_temp, items="temp",
-                            crop=i, parameter=temp_tempreature)
-
-                    # elif(param_key == 'ph'):
-                    #     temp_ph = []
-                    #     temp_ph.append(convert_tuples(
-                    #         values["soilmoisture"]))
-                    #     suit_ph = compare_baseline_field_params(
-                    #         params, temp_ph)
-                    #     print("write db")
-            elif(i == 'Wheat'):
-
-                for param_key, params in v.items():
-
-                    if(param_key == 'soilM'):
-                        temp_soil = []
-                        temp_soil.append(convert_tuples(
-                            values["soilmoisture"]))
-
-                        suit1 = compare_baseline_field_params(
-                            params, temp_soil)
-                        test_field_suitability(
-                            field_id=key, current_status=suit1, items="soil",
-                            crop=i, parameter=temp_soil)
-                    elif(param_key == 'temp'):
-                        temp_tempreature = []
-                        temp_tempreature.append(convert_list(
-                            values["temp"]))
-                        suit_temp = compare_baseline_field_params(
-                            params, temp_tempreature)
-                        test_field_suitability(
-                            field_id=key, current_status=suit_temp, items="temp",
-                            crop=i, parameter=temp_tempreature)
-
-                    # elif(param_key == 'ph'):
-                    #     temp_ph = []
-                    #     temp_ph.append(convert_tuples(
-                    #         values["soilmoisture"]))
-                    #     suit_ph = compare_baseline_field_params(
-                    #         params, temp_ph)
-                    #     print("write db")
-            elif(i == 'Flax'):
-
-                for param_key, params in v.items():
-
-                    if(param_key == 'soilM'):
-                        temp_soil = []
-                        temp_soil.append(convert_tuples(
-                            values["soilmoisture"]))
-
-                        suit1 = compare_baseline_field_params(
-                            params, temp_soil)
-                        test_field_suitability(
-                            field_id=key, current_status=suit1, items="soil",
-                            crop=i, parameter=temp_soil)
-                    elif(param_key == 'temp'):
-                        temp_tempreature = []
-                        temp_tempreature.append(convert_list(
-                            values["temp"]))
-                        suit_temp = compare_baseline_field_params(
-                            params, temp_tempreature)
-                        test_field_suitability(
-                            field_id=key, current_status=suit_temp, items="temp",
-                            crop=i, parameter=temp_tempreature)
-
-                    # elif(param_key == 'ph'):
-                    #     temp_ph = []
-                    #     temp_ph.append(convert_tuples(
-                    #         values["soilmoisture"]))
-                    #     suit_ph = compare_baseline_field_params(
-                    #         params, temp_ph)
-                    #     print("write db")
-            elif(i == 'SoyBeans'):
-
-                for param_key, params in v.items():
-
-                    if(param_key == 'soilM'):
-                        temp_soil = []
-                        temp_soil.append(convert_tuples(
-                            values["soilmoisture"]))
-
-                        suit1 = compare_baseline_field_params(
-                            params, temp_soil)
-                        test_field_suitability(
-                            field_id=key, current_status=suit1, items="soil",
-                            crop=i, parameter=temp_soil)
-                    elif(param_key == 'temp'):
-                        temp_tempreature = []
-                        temp_tempreature.append(convert_list(
-                            values["temp"]))
-                        suit_temp = compare_baseline_field_params(
-                            params, temp_tempreature)
-                        test_field_suitability(
-                            field_id=key, current_status=suit_temp, items="temp",
-                            crop=i, parameter=temp_tempreature)
-
-                    # elif(param_key == 'ph'):
-                    #     temp_ph = []
-                    #     temp_ph.append(convert_tuples(
-                    #         values["soilmoisture"]))
-                    #     suit_ph = compare_baseline_field_params(
-                    #         params, temp_ph)
-                    #     print("write db")
-
-            elif(i == 'Fabas_Beans'):
-
-                for param_key, params in v.items():
-
-                    if(param_key == 'soilM'):
-                        temp_soil = []
-                        temp_soil.append(convert_tuples(
-                            values["soilmoisture"]))
-
-                        suit1 = compare_baseline_field_params(
-                            params, temp_soil)
-                        test_field_suitability(
-                            field_id=key, current_status=suit1, items="soil",
-                            crop=i, parameter=temp_soil)
-                    elif(param_key == 'temp'):
-                        temp_tempreature = []
-                        temp_tempreature.append(convert_list(
-                            values["temp"]))
-                        suit_temp = compare_baseline_field_params(
-                            params, temp_tempreature)
-                        test_field_suitability(
-                            field_id=key, current_status=suit_temp, items="temp",
-                            crop=i, parameter=temp_tempreature)
-
-                    # elif(param_key == 'ph'):
-                    #     temp_ph = []
-                    #     temp_ph.append(convert_tuples(
-                    #         values["soilmoisture"]))
-                    #     suit_ph = compare_baseline_field_params(
-                    #         params, temp_ph)
-                    #     print("write db")
-
-            elif(i == 'Potatoes'):
-
-                for param_key, params in v.items():
-
-                    if(param_key == 'soilM'):
-                        temp_soil = []
-                        temp_soil.append(convert_tuples(
-                            values["soilmoisture"]))
-
-                        suit1 = compare_baseline_field_params(
-                            params, temp_soil)
-                        test_field_suitability(
-                            field_id=key, current_status=suit1, items="soil",
-                            crop=i, parameter=temp_soil)
-                    elif(param_key == 'temp'):
-                        temp_tempreature = []
-                        temp_tempreature.append(convert_list(
-                            values["temp"]))
-                        suit_temp = compare_baseline_field_params(
-                            params, temp_tempreature)
-                        test_field_suitability(
-                            field_id=key, current_status=suit_temp, items="temp",
-                            crop=i, parameter=temp_tempreature)
-
-                    # elif(param_key == 'ph'):
-                    #     temp_ph = []
-                    #     temp_ph.append(convert_tuples(
-                    #         values["soilmoisture"]))
-                    #     suit_ph = compare_baseline_field_params(
-                    #         params, temp_ph)
-                    #     print("write db")
-
-            elif(i == 'Barley'):
-
-                for param_key, params in v.items():
-
-                    if(param_key == 'soilM'):
-                        temp_soil = []
-                        temp_soil.append(convert_tuples(
-                            values["soilmoisture"]))
-
-                        suit1 = compare_baseline_field_params(
-                            params, temp_soil)
-                        test_field_suitability(
-                            field_id=key, current_status=suit1, items="soil",
-                            crop=i, parameter=temp_soil)
-                    elif(param_key == 'temp'):
-                        temp_tempreature = []
-                        temp_tempreature.append(convert_list(
-                            values["temp"]))
-                        suit_temp = compare_baseline_field_params(
-                            params, temp_tempreature)
-                        test_field_suitability(
-                            field_id=key, current_status=suit_temp, items="temp",
-                            crop=i, parameter=temp_tempreature)
-
-                    # elif(param_key == 'ph'):
-                    #     temp_ph = []
-                    #     temp_ph.append(convert_tuples(
-                    #         values["soilmoisture"]))
-                    #     suit_ph = compare_baseline_field_params(
-                    #         params, temp_ph)
-                    #     print("write db")
-
-            elif(i == 'Corn'):
-
-                for param_key, params in v.items():
-
-                    if(param_key == 'soilM'):
-                        temp_soil = []
-                        temp_soil.append(convert_tuples(
-                            values["soilmoisture"]))
-
-                        suit1 = compare_baseline_field_params(
-                            params, temp_soil)
-                        test_field_suitability(
-                            field_id=key, current_status=suit1, items="soil",
-                            crop=i, parameter=temp_soil)
-                    elif(param_key == 'temp'):
-                        temp_tempreature = []
-                        temp_tempreature.append(convert_list(
-                            values["temp"]))
-                        suit_temp = compare_baseline_field_params(
-                            params, temp_tempreature)
-                        test_field_suitability(
-                            field_id=key, current_status=suit_temp, items="temp",
-                            crop=i, parameter=temp_tempreature)
-
-                    # elif(param_key == 'ph'):
-                    #     temp_ph = []
-                    #     temp_ph.append(convert_tuples(
-                    #         values["soilmoisture"]))
-                    #     suit_ph = compare_baseline_field_params(
-                    #         params, temp_ph)
-                    #     print("write db")
-
-            elif(i == 'Sunflower'):
-
-                for param_key, params in v.items():
-
-                    if(param_key == 'soilM'):
-                        temp_soil = []
-                        temp_soil.append(convert_tuples(
-                            values["soilmoisture"]))
-
-                        suit1 = compare_baseline_field_params(
-                            params, temp_soil)
-                        test_field_suitability(
-                            field_id=key, current_status=suit1, items="soil",
-                            crop=i, parameter=temp_soil)
-                    elif(param_key == 'temp'):
-                        temp_tempreature = []
-                        temp_tempreature.append(convert_list(
-                            values["temp"]))
-                        suit_temp = compare_baseline_field_params(
-                            params, temp_tempreature)
-                        test_field_suitability(
-                            field_id=key, current_status=suit_temp, items="temp",
-                            crop=i, parameter=temp_tempreature)
-
-                    # elif(param_key == 'ph'):
-                    #     temp_ph = []
-                    #     temp_ph.append(convert_tuples(
-                    #         values["soilmoisture"]))
-                    #     suit_ph = compare_baseline_field_params(
-                    #         params, temp_ph)
-                    #     print("write db")
-            elif(i == 'Durum'):
-
-                for param_key, params in v.items():
-
-                    if(param_key == 'soilM'):
-                        temp_soil = []
-                        temp_soil.append(convert_tuples(
-                            values["soilmoisture"]))
-
-                        suit_soil_moisture = compare_baseline_field_params(
-                            params, temp_soil)
-                        test_field_suitability(
-                            field_id=key, current_status=suit_soil_moisture, items="soil",
-                            crop=i, parameter=temp_soil)
-                    elif(param_key == 'temp'):
-                        temp_tempreature = []
-                        temp_tempreature.append(convert_list(
-                            values["temp"]))
-                        suit_temp = compare_baseline_field_params(
-                            params, temp_tempreature)
-                        test_field_suitability(
-                            field_id=key, current_status=suit_temp, items="temp",
-                            crop=i, parameter=temp_tempreature)
-
-                    # elif(param_key == 'ph'):
-                    #     temp_ph = []
-                    #     temp_ph.append(convert_tuples(
-                    #         values["soilmoisture"]))
-                    #     suit_ph = compare_baseline_field_params(
-                    #         params, temp_ph)
-                    #     print("write db")
-
-            elif(i == 'Fall_raye'):
-
-                for param_key, params in v.items():
-
-                    if(param_key == 'soilM'):
-                        temp_soil = []
-                        temp_soil.append(convert_tuples(
-                            values["soilmoisture"]))
-
-                        suit_soil_moisture = compare_baseline_field_params(
-                            params, temp_soil)
-
-                        test_field_suitability(
-                            field_id=key, current_status=suit_soil_moisture, items="soil",
-                            crop=i, parameter=temp_soil)
-                    elif(param_key == 'temp'):
-                        temp_tempreature = []
-                        temp_tempreature.append(convert_list(
-                            values["temp"]))
-                        suit_temp = compare_baseline_field_params(
-                            params, temp_tempreature)
-                        test_field_suitability(
-                            field_id=key, current_status=suit_temp, items="temp",
-                            crop=i, parameter=temp_tempreature)
-
-                    # elif(param_key == 'ph'):
-                    #     temp_ph = []
-                    #     temp_ph.append(convert_tuples(
-                    #         values["soilmoisture"]))
-                    #     suit_ph = compare_baseline_field_params(
-                    #         params, temp_ph)
-                    #     print("write db")
+def crop_selector(baseline_values, values, key, i):
+    # test every crop  against the field values
+    [test_baseline_parameters(baseline_values, values, key, x)
+     for x in CROPS if x == i]
+    return
 
 
 def extract(data):
@@ -417,6 +40,7 @@ def extract(data):
 
 
 def convert_tuples(txt):
+    # extract values from string
     list_data = [int(s) for s in re.findall(r'\d+', txt)]
     return tuple(list_data)
 
@@ -424,7 +48,7 @@ def convert_tuples(txt):
 def convert_list(items):
     # handle string like dictionary
     temp_items = json.loads(str(items))
-   # print(temp_items)
+
     l = []
     for k, v in temp_items.items():
         l.append(v)
@@ -478,7 +102,7 @@ def insert_dss_out(query):
 
 
 def execute(sqlstatement):
-    """ query data from the gisin and gisout table  using table"""
+    """ query data from the gisin and gisout table  using table join"""
 
     try:
 
@@ -508,29 +132,30 @@ def execute(sqlstatement):
         print(error)
 
 
-def test_baseline_parameters(param_key, values, params, key, i):
-    if(param_key == 'soilM'):
-        temp_soil = []
-        temp_soil.append(convert_tuples(
-            values["soilmoisture"]))
-        suit1 = compare_baseline_field_params(
-            params, temp_soil)
-        test_field_suitability(
-            field_id=key, current_status=suit1, items="soil",
-            crop=i, parameter=temp_soil)
+def test_baseline_parameters(baseline_values, values, key, i):
+    for sa, va in baseline_values.items():
+        if(sa == 'soilM'):
+            temp_soil = []
+            temp_soil.append(convert_tuples(
+                values["soilmoisture"]))
+            suit1 = compare_baseline_field_params(
+                va, temp_soil)
+            test_field_suitability(
+                field_id=key, current_status=suit1, items="soil",
+                crop=i, parameter=temp_soil)
 
-    elif(param_key == 'temp'):
-        temp_tempreature = []
-        temp_tempreature.append(convert_list(
-            values["temp"]))
-        suit_temp = compare_baseline_field_params(
-            params, temp_tempreature)
-        test_field_suitability(
-            field_id=key, current_status=suit_temp, items="temp",
-            crop=i, parameter=temp_tempreature)
+        elif(sa == 'temp'):
+            temp_tempreature = []
+            temp_tempreature.append(convert_list(
+                values["temp"]))
+            suit_temp = compare_baseline_field_params(
+                va, temp_tempreature)
+            test_field_suitability(
+                field_id=key, current_status=suit_temp, items="temp",
+                crop=i, parameter=temp_tempreature)
 
 
 def execute_job():
     print("running job")
     # main
-    dss(execute(query), Baseline)
+    dss(execute(query), BASELINE)
