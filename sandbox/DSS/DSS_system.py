@@ -9,7 +9,7 @@ import mysql.connector
 
 current_date = date.today()
 query_date = current_date.strftime("%d/%m/%Y")
-query = 'select gn.fieldID,humidity,temp,rain,ndvi,msavi,`soil_m_6.9` from gisin gn inner join gisout go on gn.fieldID=go.fieldID limit 1000'
+query = 'select gn.fieldID,humidity,temp,rain,ndvi,msavi,soil_m_6.9 from gisin gn inner join gisout go on gn.fieldID=go.fieldID limit 1000'
 
 
 def dss(field_params, baseline_params):
@@ -19,7 +19,7 @@ def dss(field_params, baseline_params):
     for field_id, field_values in field_params.items():
 
         for crop, crop_values in baseline_params.items():
-            crop_selector(baseline_values=crop_values,
+            crop_selector(baseline_values=field_values,
                           values=field_values, key=field_id, i=crop)
 
 
@@ -56,7 +56,7 @@ def convert_list(items):
 
 def compare_baseline_field_params(l1, l2):
 
-    x = [any(y[0] <= x <= y[1] for y in l2) for x in l1]
+    x = [any(y[0] <= x <= y[1] for y in l1) for x in l2]
     return x
 
 
