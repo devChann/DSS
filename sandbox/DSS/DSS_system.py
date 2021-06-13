@@ -7,7 +7,6 @@ from Configs import BASELINE, CROPS
 import json
 import mysql.connector
 
-#  posible enhancesment -  pull date based on date.
 current_date = date.today()
 query_date = current_date.strftime("%d/%m/%Y")
 query = 'select gn.fieldID,humidity,temp,rain,ndvi,msavi,`soil_m_6.9` from gisin gn inner join gisout go on gn.fieldID=go.fieldID limit 1000'
@@ -103,7 +102,9 @@ def insert_dss_out(query):
 
 
 def execute(sqlstatement):
-    """ query data from the gisin and gisout table  using table join"""
+    """ query data from the gisin and gisout table  using table join
+        build a dictionary using the data.
+    """
 
     try:
 
